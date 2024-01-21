@@ -1,8 +1,8 @@
 package com.springboot.jwt_securityprac.service.Impl;
 
-import com.springboot.jwt_securityprac.data.CommonResponse;
-import com.springboot.jwt_securityprac.data.SigninResultDto;
-import com.springboot.jwt_securityprac.data.SignupResultDto;
+import com.springboot.jwt_securityprac.data.dto.CommonResponse;
+import com.springboot.jwt_securityprac.data.dto.SignDto.SigninResultDto;
+import com.springboot.jwt_securityprac.data.dto.SignDto.SignupResultDto;
 import com.springboot.jwt_securityprac.data.entity.User;
 import com.springboot.jwt_securityprac.jwt.JwtTokenProvider;
 import com.springboot.jwt_securityprac.repository.UserRepository;
@@ -31,19 +31,19 @@ public class SignServiceImpl implements SignService {
         this.passwordEncoder = passwordEncoder;
     }
     @Override
-    public SignupResultDto signup (String id, String password, String name , String role){
+    public SignupResultDto signup (String email, String password, String name , String role){
         logger.info("[getSignUpResult] 회원 가입 정보 전달");
         User user;
         if(role.equalsIgnoreCase("admin")){
             user = User.builder()
-                    .uid(id)
+                    .email(email)
                     .password(passwordEncoder.encode(password))
                     .name(name)
                     .roles(Collections.singletonList("ROLE_ADMIN"))
                     .build();
         }else {
             user = User.builder()
-                    .uid(id)
+                    .email(email)
                     .password(passwordEncoder.encode(password))
                     .name(name)
                     .roles(Collections.singletonList("ROLE_USER"))
@@ -62,8 +62,8 @@ public class SignServiceImpl implements SignService {
 
     }
     @Override
-    public SigninResultDto signin (String id, String password)throws RuntimeException{
-        User user = userRepository.getByUid(id);
+    public SigninResultDto signin (String email, String password)throws RuntimeException{
+        User user = userRepository.getByEmail(email);
         logger.info("[getSignInResult] 패스워드 비교 수행");
         if(!passwordEncoder.matches(password, user.getPassword())){
            throw new RuntimeException();
@@ -72,7 +72,7 @@ public class SignServiceImpl implements SignService {
 
         logger.info("[getSignInResult] SignInResultDto 객체 생성");
         SigninResultDto signInResultDto = SigninResultDto.builder()
-                .token(jwtTokenProvider.createToken(String.valueOf(user.getUid()),
+                .token(jwtTokenProvider.createToken(String.valueOf(user.getEmail()),
                         user.getRoles()))
                 .build();
 

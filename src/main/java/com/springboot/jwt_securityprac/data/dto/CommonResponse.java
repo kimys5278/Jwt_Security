@@ -1,4 +1,4 @@
-package com.springboot.jwt_securityprac.data;
+package com.springboot.jwt_securityprac.data.dto;
 
 public enum CommonResponse {
     SUCCESS(0,"Success"),FAIL(-1,"Fail");

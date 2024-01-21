@@ -1,4 +1,4 @@
-package com.springboot.jwt_securityprac.data;
+package com.springboot.jwt_securityprac.data.dto.SignDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

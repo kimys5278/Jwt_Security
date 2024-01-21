@@ -48,9 +48,9 @@ public class JwtTokenProvider {
     }
 
     //jwt 토큰 생성
-    public String createToken(String uid, List<String> roles){
+    public String createToken(String email, List<String> roles){
         //uid를 이용하여 jwt 생성
-        Claims claims = Jwts.claims().setSubject(uid);
+        Claims claims = Jwts.claims().setSubject(email);
         //클레임에 "roles"라는 이름으로 역할 정보(roles 매개변수)를 추가
         claims.put("roles",roles);
 
@@ -78,7 +78,7 @@ public class JwtTokenProvider {
         logger.info("[getUsername] 토큰에서 회원 구별 정보 추출");
         String info = Jwts.parser()
                 .setSigningKey(secretKey)// 시크릿키로 jwt 검증
-                .parseClaimsJwt(token)// 토큰 파싱하고 내용 추출
+                .parseClaimsJws(token)// 토큰 파싱하고 내용 추출
                 .getBody()// 토큰 본문 가져오기(payload)
                 .getSubject(); //Subject -> 토큰 제목 - 토큰에서 사용자에 대한 식별값
                 //클레임에서 "sub" (subject) 필드를 가져와서 회원의 구별 정보를 추출

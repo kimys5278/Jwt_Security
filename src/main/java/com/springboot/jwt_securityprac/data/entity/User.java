@@ -25,7 +25,7 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(nullable = false,unique = true)
-    private String uid;
+    private String email;
 
     @Column(nullable = false)
     private String password;
@@ -53,7 +53,7 @@ public class User implements UserDetails {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public String getUsername() {
-        return this.getUid();
+        return this.getEmail();
     }
 
     //계정이 만료됐는지 리턴 - true면 만료 X
@@ -83,4 +83,8 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
+    private List<Board> board;
+
 }

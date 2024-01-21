@@ -1,12 +1,11 @@
 package com.springboot.jwt_securityprac.controller;
 
-import com.springboot.jwt_securityprac.data.SigninResultDto;
-import com.springboot.jwt_securityprac.data.SignupResultDto;
+import com.springboot.jwt_securityprac.data.dto.SignDto.SigninResultDto;
+import com.springboot.jwt_securityprac.data.dto.SignDto.SignupResultDto;
 import com.springboot.jwt_securityprac.service.SignService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,23 +28,23 @@ public class SignController {
     }
 
     @PostMapping(value = "/sign-in")
-    public SigninResultDto signIn( @RequestParam String id,  String password)throws  RuntimeException{
-        logger.info("[signin] 로그인을 시도하고 있습니다. id : {}, password : *****", id);
-        SigninResultDto signinResultDto = signService.signin(id,password);
+    public SigninResultDto signIn( @RequestParam String email,  String password)throws  RuntimeException{
+        logger.info("[signin] 로그인을 시도하고 있습니다. email : {}, password : *****", email);
+        SigninResultDto signinResultDto = signService.signin(email,password);
 
         if(signinResultDto.getCode() == 0){
-            logger.info("[signin] 정상적으로 로그인이 되었습니다. id: {}, token : {}",id,signinResultDto.getToken());
+            logger.info("[signin] 정상적으로 로그인이 되었습니다. email: {}, token : {}",email,signinResultDto.getToken());
             signinResultDto.getToken();
         }
         return signinResultDto;
     }
     @PostMapping(value = "/sign-up")
-    public SignupResultDto signUp(@RequestParam String id, String password, String name, String role){
-        logger.info("[signUp] 회원가입을 수행합니다. id : {}, password : ****, name : {}, role : {}", id,
+    public SignupResultDto signUp(@RequestParam String email, String password, String name, String role){
+        logger.info("[signUp] 회원가입을 수행합니다. email : {}, password : ****, name : {}, role : {}", email,
                 name, role);
-        SignupResultDto signupResultDto = signService.signup(id,password,name,role);
+        SignupResultDto signupResultDto = signService.signup(email,password,name,role);
 
-        logger.info("[signUp] 회원가입을 완료했습니다. id : {}", id);
+        logger.info("[signUp] 회원가입을 완료했습니다. email : {}", email);
         return signupResultDto;
     }
 
