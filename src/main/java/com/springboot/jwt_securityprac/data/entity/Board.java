@@ -3,6 +3,7 @@ package com.springboot.jwt_securityprac.data.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@ToString(exclude = "member")
 @Table(name = "Board")
 public class Board {
     @Id
@@ -34,5 +36,7 @@ public class Board {
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+
+
 
 }

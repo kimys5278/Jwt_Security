@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/board-api")
@@ -50,6 +52,11 @@ public class BoardController {
     public ResponseEntity<String> saveGeustBoard(Long id){
         boardService.deleteBoard(id);
         return ResponseEntity.status(HttpStatus.OK).body("삭제완료");
+    }
+    @ApiImplicitParam(name = "X-AUTH-TOKEN",value="로그인 성공 후 발급 받은 access_token", required = true, dataType ="String",paramType = "header")
+    @GetMapping("/find/boardsByUser")
+    public List<BoardResponseDto> findBoardsByUsername(@RequestParam("name") String name){
+        return boardService.findBoardsByUsername(name);
     }
 
 }

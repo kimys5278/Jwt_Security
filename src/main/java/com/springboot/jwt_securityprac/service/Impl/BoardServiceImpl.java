@@ -6,7 +6,7 @@ import com.springboot.jwt_securityprac.data.dto.BoardDto.BoardRequestDto;
 import com.springboot.jwt_securityprac.data.dto.BoardDto.BoardResponseDto;
 import com.springboot.jwt_securityprac.data.entity.Board;
 import com.springboot.jwt_securityprac.jwt.JwtTokenProvider;
-import com.springboot.jwt_securityprac.repository.BoardRepository;
+import com.springboot.jwt_securityprac.repository.Board.BoardRepository;
 import com.springboot.jwt_securityprac.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +15,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 
@@ -35,6 +38,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public BoardResponseDto getContent(Long id){
+
         logger.info("[getContent] : 게시글 반환");
         Board board = boardRepository.findById(id).get();
         BoardResponseDto boardResponseDto  = new BoardResponseDto();
@@ -105,4 +109,25 @@ public class BoardServiceImpl implements BoardService {
         logger.info("[deleteBoard] : 게시글 삭제");
        boardRepository.deleteById(id);
     }
+
+    @Override
+    public List<BoardResponseDto> findBoardsByUsername(String name) {
+        List<BoardResponseDto> boardResponseDtos =
+                boardRepository.findBoardsByUsername(name)
+                        .stream()
+                        .map(m ->
+                                BoardResponseDto.builder()
+                                        .id(m.getId())
+                                        .title(m.getTitle())
+                                        .content(m.getContent())
+                                        .user(m.getUser())
+                                        .createAt(m.getCreateDate())
+                                        .updateAt(m.getUpdateDate())
+                                        .build()
+                        ).collect(Collectors.toList());
+        return boardResponseDtos;
+    }
+
+
+
 }

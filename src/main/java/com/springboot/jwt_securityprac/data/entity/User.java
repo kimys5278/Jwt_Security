@@ -1,5 +1,6 @@
 package com.springboot.jwt_securityprac.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @Entity
 @Builder
+@ToString(exclude = "boardList")
 @Table
 public class User implements UserDetails {
     @Id
@@ -36,6 +38,11 @@ public class User implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Board> board;
+
     //계정이 가지고 있는 권한 목록 리턴
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities(){
@@ -84,7 +91,5 @@ public class User implements UserDetails {
         return true;
     }
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
-    private List<Board> board;
 
 }

@@ -35,6 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             logger.info("[doFilterInternal] token 값 유효성 체크 완료");
         }
+
         filterChain.doFilter(request,response);
 
     }
